@@ -5,6 +5,7 @@ const fs = require("fs");
 
 client.config = require("./config.json");
 client.commands = new Map();
+client.dispatcher = null;
 
 fs.readdir("./commands/", (err, files) => {
 	if (err){
