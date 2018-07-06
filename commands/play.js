@@ -1,10 +1,14 @@
 const ytdl = require("ytdl-core");
 const youtube = require("simple-youtube-api");
+const color = require("dominant-color");
 const fs = require("fs");
-const queueName = './queue.json';
 const Discord = require("discord.js");
+const queueName = './queue.json';
+const request = require("request");
+
 exports.run = async(client, message, args) => {
 	const yt = new youtube(client.config.google);
+	const musicChannel = client.channels.get(client.config.music);
 	const input = args.join(" ");
 	const voiceChannel = message.member.voiceChannel;
 
@@ -35,7 +39,6 @@ exports.run = async(client, message, args) => {
 
 	if (args[0] != null){
 		song = {
-			id: video.id,
 			title: video.title,
 			url: `https://www.youtube.com/watch?v=${video.id}`,
 			duration: video.duration,
@@ -62,12 +65,7 @@ exports.run = async(client, message, args) => {
 
 
 			fs.writeFile('./queue.json', JSON.stringify(queue), 'utf8', e => { if(e) return console.error(e)});
-
-
-
-
-
-			console.log(queue);			
+		
 
 		}
 	})
@@ -114,22 +112,37 @@ exports.run = async(client, message, args) => {
 	}
 
 	function updateMenu(queue){
-		message.channel.fetchMessage(client.config.menu).then(msg => {
+		musicChannel.fetchMessage(client.config.menu).then(msg => {
 			client.menu = new Discord.RichEmbed();
-			(queue.channel == null)? client.menu.setAuthor(`Not connected to a voice channel`):client.menu.setAuthor(`Connected to: ${queue.channel}`);
+			
 
+			client.menu.setAuthor((queue.channel == null)? `Not connected to a voice channel`:`Connected to: ${queue.channel}`, "https://i.imgur.com/0eJFKFU.png");
 			if (queue.songs[0] == null){
 				client.menu.setDescription(`**Queue is currently empty**`)
+				client.menu.setColor("aaaaaa");
 			} else{
+				request(queue.songs[0].thumbnail).pipe(fs.createWriteStream('./assets/thumb.jpg'))
+					.on('finish', () => {
+						color('./assets/thumb.jpg', (e, col) =>{
+							
+							client.menu.setColor(col);
+							msg.edit(client.menu);
+						});
+					});
+
+				
 				client.menu.setDescription(`**Currently playing: **${queue.songs[0].title}\n**Duration: **${durationToString(queue.songs[0].duration)}`);
 				client.menu.setThumbnail(queue.songs[0].thumbnail);
+				
+				
+				
 			}
 
 			for(let i = 1; i < queue.songs.length; i++){
 				client.menu.addField(`**${i+1}. **${queue.songs[i].title}`, `Duration: ${durationToString(queue.songs[i].duration)}`);
 			}
 
-			client.menu.setFooter(`${queue.songs.length} songs`);
+			client.menu.setFooter(`${queue.songs.length} song` + ((queue.songs.length == 1)? "":"s") );
 			client.menu.setTimestamp();
 			
 			msg.edit(client.menu);
