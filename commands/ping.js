@@ -1,3 +1,5 @@
+const fs = require("fs");
 exports.run = async(client, message, args) => {
-	message.channel.send("hello");
+	message.channel.bulkDelete(10);
+	
 };

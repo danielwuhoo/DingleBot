@@ -12,6 +12,7 @@
     "discord.js": "^11.3.2",
     "edit-json-file": "^1.0.8",
     "node-opus": "^0.3.0",
+    "simple-youtube-api": "^5.0.2",
     "ytdl-core": "^0.20.4"
   }
 }

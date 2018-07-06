@@ -1,8 +1,6 @@
 const fs = require("fs");
 const queueName = './queue.json';
 exports.run = async(client, message, args) => {
-
-	const voiceChannel = message.member.voiceChannel;
 	
 	fs.readFile(queueName, 'utf8', (e, data) => {
 			if (e){
