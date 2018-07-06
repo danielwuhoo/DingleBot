@@ -129,7 +129,7 @@ exports.run = async(client, message, args) => {
 				client.menu.addField(`**${i+1}. **${queue.songs[i].title}`, `Duration: ${durationToString(queue.songs[i].duration)}`);
 			}
 
-			
+			client.menu.setFooter(`${queue.songs.length} songs`);
 			client.menu.setTimestamp();
 			
 			msg.edit(client.menu);
