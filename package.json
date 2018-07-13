@@ -17,5 +17,9 @@
     "request": "^2.87.0",
     "simple-youtube-api": "^5.0.2",
     "ytdl-core": "^0.20.4"
+  },
+  "devDependencies": {
+    "eslint": "^5.0.1",
+    "eslint-config-google": "^0.9.1"
   }
 }
