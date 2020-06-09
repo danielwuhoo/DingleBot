@@ -10,7 +10,7 @@ exports.run = async(client, message, args) => {
 			queue.songs[0] = null;
 		}
 	});
-	client.dispatcher.end();
+	client.dispatcher.emit('finish');
 	
 	
 	

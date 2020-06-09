@@ -1,6 +1,6 @@
 module.exports = (client, message) => {
 	if (message.channel.id === client.config.music){
-		message.delete(10);
+		message.delete({timeout: 20});
 	}
 	if (message.author.bot) return;
 	if (message.content.indexOf(client.config.prefix) != 0) return;

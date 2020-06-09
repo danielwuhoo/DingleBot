@@ -5,7 +5,7 @@ const fs = require("fs");
 
 client.config = require("./config.json");
 client.commands = new Map();
-client.menu = new Discord.RichEmbed();
+client.menu = new Discord.MessageEmbed();
 client.dispatcher = null;
 
 fs.readdir("./commands/", (err, files) => {

@@ -3,8 +3,8 @@ const functions = require("../modules/functions.js");
 const Discord = require("discord.js");
 
 exports.run = async (client, message, args) => {
-	const musicChannel = client.channels.get(client.config.music);
-	const msg = await musicChannel.fetchMessage(client.config.menu);
+	const musicChannel = client.channels.cache.get(client.config.music);
+	const msg = await musicChannel.messages.fetch(client.config.menu);
 	functions.updateFile(queueName, (queue) => {
 		let qSize = queue.songs.length;
 		//check for duplicates
@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
 			} 
 			if (args[0] == "all"){
 				queue.songs = [];
-				client.dispatcher.end();
+				client.dispatcher.emit('finish');
 				return;
 			}
 			args.forEach((arg) => {
@@ -32,7 +32,7 @@ exports.run = async (client, message, args) => {
 
 			});
 		} catch (e){
-	    	functions.updateMenu(msg, new Discord.RichEmbed(), queue, e);
+	    	functions.updateMenu(msg, new Discord.MessageEmbed(), queue, e);
 	    	return;
 		}
 		args.sort((a,b) => {return b - a});
@@ -40,7 +40,7 @@ exports.run = async (client, message, args) => {
 			queue.songs.splice(arg - 1, 1);
 
 		});
-		functions.updateMenu(msg, new Discord.RichEmbed(), queue);
+		functions.updateMenu(msg, new Discord.MessageEmbed(), queue);
 
 
 	});

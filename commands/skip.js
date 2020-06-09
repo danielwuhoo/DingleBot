@@ -10,7 +10,7 @@ exports.run = async(client, message, args) => {
 				if (!queue.playing){
 					console.log("Nothing is being played");
 				} else{
-					client.dispatcher.end();				
+					client.dispatcher.emit('finish');				
 				}
 				
 			}

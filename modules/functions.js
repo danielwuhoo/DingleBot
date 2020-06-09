@@ -88,13 +88,14 @@ module.exports = {
             embed.setColor("aaaaaa");
         } else {
         	
-        	embed.setColor(await module.exports.downloadColor(queue.songs[0].thumbnail, './assets/thumb.jpg'));
+        	// embed.setColor(await module.exports.downloadColor(queue.songs[0].thumbnail, './assets/thumb.jpg'));
             embed.setDescription(`**Currently playing: **${queue.songs[0].title}\n**Duration: **${module.exports.durationToString(queue.songs[0].duration)}`);
             embed.setThumbnail(queue.songs[0].thumbnail);
         }
 
         if (error){
-        	embed.addField("Additional Notes:", `\`\`\`${error.message}\`\`\``);
+			embed.addField("Additional Notes:", `\`\`\`${error.message}\`\`\``);
+			console.log(error);
         }
 
         return msg.edit(embed);
