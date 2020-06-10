@@ -1,4 +1,4 @@
-	
+
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const fs = require("fs");
@@ -9,7 +9,7 @@ client.menu = new Discord.MessageEmbed();
 client.dispatcher = null;
 
 fs.readdir("./commands/", (err, files) => {
-	if (err){
+	if (err) {
 		return console.error(err);
 	}
 	files.forEach(file => {
@@ -21,7 +21,7 @@ fs.readdir("./commands/", (err, files) => {
 });
 
 fs.readdir("./events/", (err, files) => {
-	if (err){
+	if (err) {
 		return console.error(err);
 	}
 	files.forEach(file => {

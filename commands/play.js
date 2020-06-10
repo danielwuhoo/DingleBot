@@ -19,24 +19,29 @@ exports.run = async (client, message, args) => {
 
 
     try {
-    	if (!voiceChannel){
-    		throw new Error('Join a voice channel to play music');
-    	}
-		connection = await functions.voiceJoin(voiceChannel);
-		song = functions.obtainSong(await functions.obtainVideo(yt, input));	
-    } catch (e){
-    	functions.updateFile(queueName, (queue) => {
-    		functions.updateMenu(msg, new Discord.MessageEmbed(), queue, e);
-    	});
-    	return;
+        if (!voiceChannel) {
+            throw new Error('Join a voice channel to play music');
+        }
+        connection = await functions.voiceJoin(voiceChannel);
+        song = functions.obtainSong(await functions.obtainVideo(yt, input));
+    } catch (e) {
+        functions.updateFile(queueName, (queue) => {
+            functions.updateMenu(msg, new Discord.MessageEmbed(), queue, e);
+        });
+        return;
 
     }
 
 
     functions.updateFile(queueName, (queue) => {
-	    queue.channel = voiceChannel.name;
+        queue.channel = voiceChannel.name;
         if (song != null) {
-            queue.songs.push(song);
+            if (Array.isArray(song)) {
+                queue.songs.push(...song);
+            } else {
+                queue.songs.push(song);
+            }
+            
         }
         if (!queue.playing) {
             play(queue.songs[0]);
@@ -48,32 +53,31 @@ exports.run = async (client, message, args) => {
 
     async function play(song) {
         if (!song || song == null) {
-			functions.updateFile(queueName, (queue) => {
-			    queue.channel = null;
+            functions.updateFile(queueName, (queue) => {
+                queue.channel = null;
                 queue.playing = false;
                 functions.updateMenu(msg, new Discord.MessageEmbed(), queue);
-			});
+            });
             voiceChannel.leave();
             return;
         }
-        client.dispatcher = connection.play( await ytdl(song.url), { type: 'opus' })
+        client.dispatcher = connection.play(await ytdl(song.url), { type: 'opus' })
             .on('finish', () => {
-            	functions.updateFile(queueName, (queue) => {
-            		if (queue.songs.shift() != null) {
+                functions.updateFile(queueName, (queue) => {
+                    if (queue.songs.shift() != null) {
                         play(queue.songs[0]);
                     } else {
                         play(null);
                     }
-                    console.log(queue);
                     functions.updateMenu(msg, new Discord.MessageEmbed(), queue);
-				});
+                });
             })
             .on('error', e => console.error(e));
 
     }
 
 
-    
+
 
 
 };
