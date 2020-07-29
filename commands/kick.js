@@ -3,7 +3,7 @@ exports.run = async (client, message, args) => {
     let votesNeeded;
 
     try {
-        votesNeeded = message.guild.member(message.mentions.users.first()).voice.channel.members.size / 2;
+        votesNeeded = parseInt(message.guild.member(message.mentions.users.first()).voice.channel.members.size / 2);
         if (votesNeeded < 3) votesNeeded = 3;
     } catch (e) {
         message.channel.send(`<@${message.mentions.users.first().id}> is not in a voice channel`);
