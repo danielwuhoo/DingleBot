@@ -113,7 +113,7 @@ module.exports = {
 		} else {
 
 			embed.setColor(await module.exports.downloadColor(queue.songs[0].thumbnail, './assets/thumb.jpg'));
-			embed.setDescription(`**Currently playing: **${queue.songs[0].title}\n**Duration: **${module.exports.durationToString(queue.songs[0].duration)}`);
+			embed.setDescription(`**Currently playing: **${queue.songs[0].title}\n**Duration: **${module.exports.durationToString(queue.songs[0].duration)}\n**Requested By: **${queue.songs[0].requestedBy}`);
 			embed.setThumbnail(queue.songs[0].thumbnail);
 		}
 

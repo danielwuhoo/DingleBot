@@ -37,8 +37,13 @@ exports.run = async (client, message, args) => {
         queue.channel = voiceChannel.name;
         if (song != null) {
             if (Array.isArray(song)) {
+                song.map((s) => {
+                    s.requestedBy = message.author;
+                    return s;
+                })
                 queue.songs.push(...song);
             } else {
+                song.requestedBy = message.author;
                 queue.songs.push(song);
             }
             
