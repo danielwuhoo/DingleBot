@@ -13,9 +13,24 @@ exports.run = async (client, message, args) => {
 
     await vote.react('👍');
 
-    const filter = (reaction, user) => reaction.emoji.name == '👍';
+    const filter = reaction => reaction.emoji.name == '👍';
 
-    let collector = vote.createReactionCollector(filter, { time: 20000 });
+    let collector = vote.createReactionCollector(filter, { time: 20000, dispose: true });
+    let votesCollected = 0;
+
+    collector.on('collect', reaction => {
+        if (reaction.emoji.toString() == '👍') votesCollected++;
+
+        if (votesCollected >= votesNeeded - 1) {
+            message.guild.member(message.mentions.users.first()).voice.setChannel(null);
+            vote.edit(`<@${message.mentions.users.first().id}> has been disconnected`);
+        }
+    });
+
+    collector.on('dispose', reaction => {
+        if (reaction.emoji.toString() == '👍') votesCollected--;
+    });
+
     collector.on('end', collected => {
         if (collected.get('👍').count >= votesNeeded) {
             message.guild.member(message.mentions.users.first()).voice.setChannel(null);
