@@ -1,9 +1,9 @@
-const queueName = './queue.json';
 const functions = require("../modules/functions.js");
+const { QUEUE } = require('../modules/constants.js');
 
 module.exports = async client => {
 
-	functions.updateFile(queueName, (queue) =>{
+	functions.updateFile(QUEUE, (queue) =>{
 		queue.playing = false;
 	});
 		

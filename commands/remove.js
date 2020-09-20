@@ -1,11 +1,11 @@
-const queueName = './queue.json';
-const functions = require("../modules/functions.js");
 const Discord = require("discord.js");
+const functions = require("../modules/functions.js");
+const { QUEUE } = require('../modules/constants.js');
 
 exports.run = async (client, message, args) => {
 	const musicChannel = client.channels.cache.get(client.config.music);
 	const msg = await musicChannel.messages.fetch(client.config.menu);
-	functions.updateFile(queueName, (queue) => {
+	functions.updateFile(QUEUE, (queue) => {
 		let qSize = queue.songs.length;
 		//check for duplicates
 		try {

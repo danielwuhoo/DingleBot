@@ -1,3 +1,7 @@
+assets/
+
 node_modules/
 
 config.json
+
+queue.json

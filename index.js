@@ -1,8 +1,8 @@
 
 const Discord = require("discord.js");
-const client = new Discord.Client();
 const fs = require("fs");
 
+const client = new Discord.Client();
 client.config = process.env;
 client.commands = new Map();
 client.menu = new Discord.MessageEmbed();
@@ -16,7 +16,6 @@ fs.readdir("./commands/", (err, files) => {
 		if (!file.endsWith(".js")) return;
 		let cmd = require(`./commands/${file}`);
 		client.commands.set(file.split(".")[0], cmd);
-
 	});
 });
 
@@ -28,9 +27,7 @@ fs.readdir("./events/", (err, files) => {
 		let event = require(`./events/${file}`);
 		let eventName = file.split(".")[0];
 		client.on(eventName, event.bind(null, client));
-
 	});
-
 });
 
 client.login(client.config.token);

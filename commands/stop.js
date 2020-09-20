@@ -1,9 +1,9 @@
-const queueName = './queue.json';
 const functions = require("../modules/functions.js");
+const { QUEUE } = require('../modules/constants.js');
 
 exports.run = async(client, message, args) => {
 
-	await functions.updateFile(queueName, (queue) =>{
+	await functions.updateFile(QUEUE, (queue) =>{
 		if (!queue.playing){
 			console.log("Nothing is being played");
 		} else{

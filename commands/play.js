@@ -1,11 +1,8 @@
 const Discord = require("discord.js");
 const ytdl = require("ytdl-core-discord");
 const youtube = require("simple-youtube-api");
-const fs = require("fs");
-const request = require("request");
-const queueName = './queue.json';
 const functions = require("../modules/functions.js");
-
+const { QUEUE } = require('../modules/constants.js');
 
 exports.run = async (client, message, args) => {
     const yt = new youtube(client.config.google);
@@ -16,8 +13,6 @@ exports.run = async (client, message, args) => {
     let connection;
     let song;
 
-
-
     try {
         if (!voiceChannel) {
             throw new Error('Join a voice channel to play music');
@@ -25,15 +20,13 @@ exports.run = async (client, message, args) => {
         connection = await functions.voiceJoin(voiceChannel);
         song = functions.obtainSong(await functions.obtainVideo(yt, input));
     } catch (e) {
-        functions.updateFile(queueName, (queue) => {
+        functions.updateFile(QUEUE, (queue) => {
             functions.updateMenu(msg, new Discord.MessageEmbed(), queue, e);
         });
         return;
-
     }
 
-
-    functions.updateFile(queueName, (queue) => {
+    functions.updateFile(QUEUE, (queue) => {
         queue.channel = voiceChannel.name;
         if (song != null) {
             if (Array.isArray(song)) {
@@ -46,19 +39,17 @@ exports.run = async (client, message, args) => {
                 song.requestedBy = message.author;
                 queue.songs.push(song);
             }
-            
         }
         if (!queue.playing) {
             play(queue.songs[0]);
             queue.playing = true;
         }
         functions.updateMenu(msg, new Discord.MessageEmbed(), queue);
-
     });
 
     async function play(song) {
         if (!song || song == null) {
-            functions.updateFile(queueName, (queue) => {
+            functions.updateFile(QUEUE, (queue) => {
                 queue.channel = null;
                 queue.playing = false;
                 functions.updateMenu(msg, new Discord.MessageEmbed(), queue);
@@ -68,7 +59,7 @@ exports.run = async (client, message, args) => {
         }
         client.dispatcher = connection.play(await ytdl(song.url), { type: 'opus' })
             .on('finish', () => {
-                functions.updateFile(queueName, (queue) => {
+                functions.updateFile(QUEUE, (queue) => {
                     if (queue.songs.shift() != null) {
                         play(queue.songs[0]);
                     } else {
@@ -78,11 +69,5 @@ exports.run = async (client, message, args) => {
                 });
             })
             .on('error', e => console.error(e));
-
     }
-
-
-
-
-
 };
