@@ -27,7 +27,7 @@ exports.run = async (client, message, args) => {
         }
     });
 
-    collector.on('dispose', reaction => {
+    collector.on('remove', reaction => {
         if (reaction.emoji.toString() == '👍') votesCollected--;
     });
 
