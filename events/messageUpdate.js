@@ -1,5 +1,5 @@
 module.exports = async (client, oldMessage, newMessage) => {
-    if (!client.config.echoDelete) return;
+    if (!client.config.echo) return;
 
     if (oldMessage.author.bot) return;
     

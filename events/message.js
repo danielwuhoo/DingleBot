@@ -6,7 +6,7 @@ module.exports = (client, message) => {
 	}
 	if (message.author.bot) return;
 	
-	if (client.config.echoDelete == 'true' && message.attachments.size) request([...message.attachments.values()][0].attachment);
+	if (client.config.echo == 'true' && message.attachments.size) request([...message.attachments.values()][0].attachment);
 	if (message.content.indexOf(client.config.prefix) != 0) return;
 
 
