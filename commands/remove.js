@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
 			}
 			if (args[0] == "all") {
 				queue.songs = [];
-				client.dispatcher.emit('finish');
+				if (client.dispatcher) client.dispatcher.emit('finish');
 				return;
 			}
 			args.forEach((arg) => {
